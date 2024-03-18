@@ -1,0 +1,174 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Albums API",
+  "description": "This service provides API to manage albums.",
+  "version": "v1.0.0"
+ },
+ "paths": {
+  "/albums": {
+   "get": {
+    "tags": [
+     "Album"
+    ],
+    "summary": "Get Albums",
+    "operationId": "getAlbums",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/Album"
+         },
+         "type": [
+          "null",
+          "array"
+         ]
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "Album"
+    ],
+    "summary": "Post Albums",
+    "operationId": "postAlbums",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/Album"
+       }
+      }
+     }
+    },
+    "responses": {
+     "201": {
+      "description": "Created",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Album"
+        }
+       }
+      }
+     },
+     "409": {
+      "description": "Conflict",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AnotherErr"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/albums/{id}": {
+   "get": {
+    "tags": [
+     "Album"
+    ],
+    "summary": "Get Album By ID",
+    "operationId": "getAlbumByID",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "$ref": "#/components/schemas/UuidUUID"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Album"
+        }
+       }
+      }
+     },
+     "404": {
+      "description": "Not Found",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CustomErr"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "Album": {
+    "properties": {
+     "artist": {
+      "description": "Album author, can be empty for multi-artist compilations.",
+      "type": "string"
+     },
+     "id": {
+      "$ref": "#/components/schemas/UuidUUID",
+      "description": "ID is a unique string that determines album.",
+      "minLength": 1
+     },
+     "price": {
+      "description": "Price in USD.",
+      "minimum": 0,
+      "type": "number"
+     },
+     "title": {
+      "description": "Title of the album.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "title"
+    ],
+    "type": "object"
+   },
+   "AnotherErr": {
+    "properties": {
+     "foo": {
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "CustomErr": {
+    "properties": {
+     "details": {
+      "additionalProperties": {},
+      "type": "object"
+     },
+     "msg": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "UuidUUID": {
+    "examples": [
+     "248df4b7-aa70-47b8-a036-33ac447e668d"
+    ],
+    "format": "uuid",
+    "type": "string"
+   }
+  }
+ }
+}
